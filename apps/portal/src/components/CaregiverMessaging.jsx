@@ -84,30 +84,30 @@ export default function CaregiverMessaging() {
     new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 
   return (
-    <section id="messaging" className="py-24 bg-slate-900/30">
-      <div className="max-w-4xl mx-auto px-6">
-        <div className="text-center mb-12">
+    <section id="messaging" className="py-20 sm:py-24 bg-slate-900/30">
+      <div className="max-w-4xl mx-auto px-3 sm:px-6">
+        <div className="text-center mb-8 sm:mb-12">
           <p className="text-blue-400 font-semibold uppercase tracking-widest mb-4">
             Caregiver Messaging
           </p>
-          <h2 className="text-4xl lg:text-5xl font-bold mb-4">Real-Time Care Coordination</h2>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-4">Real-Time Care Coordination</h2>
+          <p className="text-slate-400 text-sm sm:text-lg max-w-2xl mx-auto">
             Caregivers and coordinators communicate instantly in secure, dedicated rooms.
           </p>
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-[32px] overflow-hidden shadow-2xl">
-          <div className="bg-gradient-to-r from-blue-700 to-blue-600 px-6 py-4 flex items-center justify-between">
-            <div>
-              <h3 className="font-semibold text-lg">Secure Messaging</h3>
+          <div className="bg-gradient-to-r from-blue-700 to-blue-600 px-4 sm:px-6 py-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
+              <h3 className="font-semibold text-base sm:text-lg">Secure Messaging</h3>
               {joined && (
-                <p className="text-xs text-blue-100">
-                  Room: <span className="font-medium">{room}</span> · as{' '}
-                  <span className="font-medium">{userName}</span>
+                <p className="text-[11px] sm:text-xs text-blue-100 leading-tight break-words">
+                  Room: <span className="font-medium break-all">{room}</span> · as{' '}
+                  <span className="font-medium break-all">{userName}</span>
                 </p>
               )}
             </div>
-            <div className="flex items-center gap-2 text-xs">
+            <div className="flex items-center gap-2 text-[11px] sm:text-xs self-start sm:self-auto">
               <div
                 className={`w-2.5 h-2.5 rounded-full ${
                   connected ? 'bg-green-400 animate-pulse' : 'bg-red-400'
@@ -120,39 +120,39 @@ export default function CaregiverMessaging() {
           </div>
 
           {!joined ? (
-            <form onSubmit={handleJoin} className="p-8 space-y-5 max-w-md mx-auto">
+            <form onSubmit={handleJoin} className="p-4 sm:p-8 space-y-4 sm:space-y-5 max-w-md mx-auto">
               <div>
-                <label className="block text-sm text-slate-400 mb-2">Your Name</label>
+                <label className="block text-xs sm:text-sm text-slate-400 mb-2">Your Name</label>
                 <input
                   value={userName}
                   onChange={(event) => setUserName(event.target.value)}
                   placeholder="e.g. Nurse Williams"
-                  className="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 rounded-2xl px-5 py-4 outline-none transition"
+                  className="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 rounded-2xl px-3 sm:px-5 py-3 sm:py-4 text-sm outline-none transition min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                 />
               </div>
               <div>
-                <label className="block text-sm text-slate-400 mb-2">Room / Patient ID</label>
+                <label className="block text-xs sm:text-sm text-slate-400 mb-2">Room / Patient ID</label>
                 <input
                   value={room}
                   onChange={(event) => setRoom(event.target.value)}
                   placeholder="e.g. patient-smith-101"
-                  className="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 rounded-2xl px-5 py-4 outline-none transition"
+                  className="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 rounded-2xl px-3 sm:px-5 py-3 sm:py-4 text-sm outline-none transition min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                 />
               </div>
-              {joinError && <p className="text-red-400 text-sm">{joinError}</p>}
+              {joinError && <p className="text-red-400 text-xs sm:text-sm">{joinError}</p>}
               <button
                 type="submit"
                 disabled={!connected}
-                className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed py-4 rounded-2xl font-semibold transition"
+                className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed py-3 sm:py-4 rounded-2xl font-semibold text-sm transition min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
               >
                 {connected ? 'Join Room' : 'Connecting…'}
               </button>
             </form>
           ) : (
             <>
-              <div className="h-[380px] overflow-y-auto p-5 space-y-3 bg-slate-950">
+              <div className="h-[300px] sm:h-[380px] overflow-y-auto p-3 sm:p-5 space-y-3 bg-slate-950">
                 {timeline.length === 0 && (
-                  <p className="text-center text-slate-600 text-sm mt-16">
+                  <p className="text-center text-slate-500 text-xs sm:text-sm mt-16">
                     No messages yet. Start the conversation.
                   </p>
                 )}
@@ -160,7 +160,7 @@ export default function CaregiverMessaging() {
                 {timeline.map((item, index) =>
                   item.isSystem ? (
                     <div key={index} className="flex justify-center">
-                      <span className="text-xs text-slate-500 bg-slate-900 px-3 py-1 rounded-full">
+                      <span className="text-[11px] sm:text-xs text-slate-400 bg-slate-900 px-3 py-1 rounded-full text-center leading-tight">
                         {item.text} · {formatTime(item.timestamp)}
                       </span>
                     </div>
@@ -171,11 +171,11 @@ export default function CaregiverMessaging() {
                         item.userName === userName ? 'items-end' : 'items-start'
                       }`}
                     >
-                      <span className="text-xs text-slate-500 mb-1 px-1">
+                      <span className="text-xs text-slate-500 mb-1 px-1 break-words">
                         {item.userName} · {formatTime(item.timestamp)}
                       </span>
                       <div
-                        className={`max-w-[75%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
+                        className={`max-w-[88%] sm:max-w-[75%] px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-sm leading-relaxed break-words ${
                           item.userName === userName
                             ? 'bg-blue-600 text-white'
                             : 'bg-slate-800 text-slate-200'
@@ -189,7 +189,7 @@ export default function CaregiverMessaging() {
                 <div ref={messagesEndRef} />
               </div>
 
-              <div className="p-4 border-t border-slate-800 flex gap-2">
+              <div className="p-3 sm:p-4 border-t border-slate-800 flex flex-col sm:flex-row gap-2">
                 <input
                   value={input}
                   onChange={(event) => setInput(event.target.value)}
@@ -200,12 +200,12 @@ export default function CaregiverMessaging() {
                     }
                   }}
                   placeholder="Type a message…"
-                  className="flex-1 bg-slate-800 border border-slate-700 focus:border-blue-500 rounded-xl px-4 py-3 text-sm outline-none transition"
+                  className="flex-1 bg-slate-800 border border-slate-700 focus:border-blue-500 rounded-xl px-3 py-2.5 sm:py-3 text-sm outline-none transition min-w-0 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                 />
                 <button
                   onClick={handleSend}
                   disabled={sending || !input.trim()}
-                  className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed px-6 rounded-xl font-medium text-sm transition"
+                  className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-2.5 sm:py-3 rounded-xl font-medium text-sm transition w-full sm:w-auto min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                 >
                   Send
                 </button>

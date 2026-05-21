@@ -84,25 +84,25 @@ export default function CaregiverCareerPortal() {
   }
 
   return (
-    <section id="careers" className="py-24 bg-gradient-to-br from-blue-950/40 to-slate-950">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-14">
+    <section id="careers" className="py-20 lg:py-24 bg-gradient-to-br from-blue-950/40 to-slate-950">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="text-center mb-10 sm:mb-14">
           <p className="text-blue-400 font-semibold uppercase tracking-widest mb-4">
             Caregiver Careers
           </p>
-          <h2 className="text-4xl lg:text-5xl font-bold mb-4">Apply to Join the Kenkwo Team</h2>
-          <p className="text-slate-300 text-lg max-w-3xl mx-auto leading-relaxed">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Apply to Join the Kenkwo Team</h2>
+          <p className="text-slate-300 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
             Submit your caregiver application online with your contact information, role preference,
             availability, and resume.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-8">
+        <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-6 lg:gap-8">
           <form
             onSubmit={handleSubmit}
-            className="bg-slate-900 border border-slate-800 rounded-[32px] p-8 lg:p-10 space-y-6"
+            className="bg-slate-900 border border-slate-800 rounded-[32px] p-6 sm:p-8 lg:p-10 space-y-6"
           >
-            <div className="grid md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
                 <label className="block text-sm text-slate-400 mb-2" htmlFor="fullName">
                   Full Name
@@ -283,8 +283,8 @@ export default function CaregiverCareerPortal() {
           </form>
 
           <div className="space-y-6">
-            <div className="bg-slate-900 border border-slate-800 rounded-[32px] p-8">
-              <h3 className="text-2xl font-semibold mb-4">What We Collect</h3>
+            <div className="bg-slate-900 border border-slate-800 rounded-[32px] p-6 sm:p-8">
+              <h3 className="text-xl sm:text-2xl font-semibold mb-4">What We Collect</h3>
               <div className="space-y-3 text-slate-300">
                 <p>• Contact details for follow-up</p>
                 <p>• Role and availability preferences</p>
@@ -293,8 +293,8 @@ export default function CaregiverCareerPortal() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-950/40 to-slate-900 border border-slate-800 rounded-[32px] p-8">
-              <h3 className="text-2xl font-semibold mb-4">Backend Workflow</h3>
+            <div className="bg-gradient-to-br from-blue-950/40 to-slate-900 border border-slate-800 rounded-[32px] p-6 sm:p-8">
+              <h3 className="text-xl sm:text-2xl font-semibold mb-4">Backend Workflow</h3>
               <div className="space-y-4 text-slate-300">
                 <p>• POSTs to <span className="text-white">/api/career-applications</span></p>
                 <p>• Validates required fields and resume file type</p>

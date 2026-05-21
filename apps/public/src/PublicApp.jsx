@@ -16,12 +16,13 @@ export default function PublicApp() {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      text: 'Hello! Welcome to Kenkwo Homecare. How can we help you today?',
+      text: 'Hello! Welcome to Kenkwo Homecare. Ask me about services, about us, contact details, pricing, or careers.',
     },
   ])
 
   const [input, setInput] = useState('')
   const [isChatSending, setIsChatSending] = useState(false)
+  const [isChatMinimized, setIsChatMinimized] = useState(false)
   const chatEndRef = useRef(null)
 
   const [bookingForm, setBookingForm] = useState({
@@ -46,6 +47,31 @@ export default function PublicApp() {
 
     if (normalized.includes('nurse') || normalized.includes('nursing')) {
       return 'Yes, we provide skilled nursing services including medication support and recovery monitoring. We can match you with a nurse quickly.'
+    }
+
+    if (
+      normalized.includes('service') ||
+      normalized.includes('services') ||
+      normalized.includes('care plan')
+    ) {
+      return 'We offer Skilled Nursing, Private Rehabilitation, Companion Care, Homemaker Services, Respite Care, and IV Infusion Services. Tell me the type of support you need and we can recommend the best fit.'
+    }
+
+    if (
+      normalized.includes('about') ||
+      normalized.includes('who are you') ||
+      normalized.includes('company')
+    ) {
+      return 'Kenkwo Homecare provides compassionate, premium in-home care across North Atlanta. Our focus is trusted caregivers, personalized care plans, and responsive support for families.'
+    }
+
+    if (
+      normalized.includes('contact') ||
+      normalized.includes('phone') ||
+      normalized.includes('email') ||
+      normalized.includes('call')
+    ) {
+      return `You can contact Kenkwo Homecare at ${phoneNumber} or ${bookingEmail}. You can also use the Contact section or book a consultation directly on this page.`
     }
 
     if (normalized.includes('job') || normalized.includes('career') || normalized.includes('apply')) {
@@ -163,9 +189,9 @@ export default function PublicApp() {
         />
 
         <header className="border-b border-slate-800 bg-slate-900/70 backdrop-blur sticky top-0 z-40">
-          <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <a href="/" className="font-semibold text-lg">Kenkwo Homecare</a>
-            <div className="flex items-center gap-6 text-sm text-slate-300">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-300">
               <a href="/" className="hover:text-white transition">Home</a>
               <a href="/news" className="text-white">News</a>
               <a href={portalUrl} className="hover:text-white transition">Portal</a>
@@ -216,9 +242,9 @@ export default function PublicApp() {
         />
 
         <header className="border-b border-slate-800 bg-slate-900/70 backdrop-blur sticky top-0 z-40">
-          <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <a href="/" className="font-semibold text-lg">Kenkwo Homecare</a>
-            <div className="flex items-center gap-6 text-sm text-slate-300">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-300">
               <a href="/" className="hover:text-white transition">Home</a>
               <a href="/news" className="hover:text-white transition">News</a>
               <a href={portalUrl} className="hover:text-white transition">Portal</a>
@@ -252,14 +278,14 @@ export default function PublicApp() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-slate-950" />
 
-        <div className="relative max-w-7xl mx-auto px-6 py-24 lg:py-32">
-          <nav className="flex items-center justify-between mb-20">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 lg:py-32">
+          <nav className="flex flex-col gap-4 mb-14 sm:mb-16 lg:mb-20 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <h1 className="text-2xl font-bold tracking-wide">Kenkwo Homecare</h1>
               <p className="text-sm text-slate-400">Premium In-Home Care Services</p>
             </div>
 
-            <div className="hidden md:flex items-center gap-8 text-sm text-slate-300">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-300">
               <a href="#services" className="hover:text-white transition">Services</a>
               <a href="#about" className="hover:text-white transition">About</a>
               <a href="/news" className="hover:text-white transition">News</a>
@@ -269,39 +295,39 @@ export default function PublicApp() {
             </div>
           </nav>
 
-          <div className="grid lg:grid-cols-2 gap-14 items-center">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
             <div>
               <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-2 text-sm text-blue-300 mb-6">
                 Serving North Atlanta Families
               </div>
 
-              <h2 className="text-5xl lg:text-7xl font-bold leading-tight mb-6">
+              <h2 className="text-4xl sm:text-5xl lg:text-7xl font-bold leading-tight mb-6">
                 Compassionate Care.
                 <span className="block text-blue-400">Luxury-Level Service.</span>
               </h2>
 
-              <p className="text-lg text-slate-300 leading-relaxed mb-8 max-w-xl">
+              <p className="text-base sm:text-lg text-slate-300 leading-relaxed mb-8 max-w-xl">
                 Kenkwo Homecare provides premium in-home care services designed to help seniors and recovering patients live safely, comfortably, and independently.
               </p>
 
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   type="button"
                   onClick={handleScheduleConsultationClick}
-                  className="bg-blue-600 hover:bg-blue-700 transition px-6 py-4 rounded-2xl font-semibold shadow-lg shadow-blue-500/20"
+                  className="bg-blue-600 hover:bg-blue-700 transition px-6 py-4 rounded-2xl font-semibold shadow-lg shadow-blue-500/20 text-center"
                 >
                   Schedule Consultation
                 </button>
 
                 <a
                   href={phoneHref}
-                  className="border border-slate-700 hover:border-slate-500 transition px-6 py-4 rounded-2xl font-semibold bg-slate-900/40"
+                  className="border border-slate-700 hover:border-slate-500 transition px-6 py-4 rounded-2xl font-semibold bg-slate-900/40 text-center"
                 >
                   Call Now
                 </a>
               </div>
 
-              <div className="grid grid-cols-3 gap-6 mt-12">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-12">
                 <div>
                   <h3 className="text-3xl font-bold text-blue-400">24/7</h3>
                   <p className="text-slate-400 text-sm mt-1">Care Availability</p>
@@ -320,11 +346,11 @@ export default function PublicApp() {
             </div>
 
             <div>
-              <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-[32px] p-8 border border-slate-800 shadow-2xl">
+              <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-[32px] p-4 sm:p-6 lg:p-8 border border-slate-800 shadow-2xl">
                 <img
                   src="https://images.unsplash.com/photo-1584515933487-779824d29309?q=80&w=1200&auto=format&fit=crop"
                   alt="Homecare"
-                  className="rounded-3xl h-[500px] w-full object-cover"
+                  className="rounded-3xl h-[280px] sm:h-[360px] lg:h-[500px] w-full object-cover"
                 />
               </div>
             </div>
@@ -332,19 +358,19 @@ export default function PublicApp() {
         </div>
       </section>
 
-      <section id="services" className="py-24 bg-slate-900/50">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
+      <section id="services" className="py-20 lg:py-24 bg-slate-900/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12 sm:mb-16">
             <p className="text-blue-400 font-semibold uppercase tracking-widest mb-4">
               Our Services
             </p>
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">Complete Homecare Solutions</h2>
-            <p className="text-slate-400 max-w-2xl mx-auto text-lg">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">Complete Homecare Solutions</h2>
+            <p className="text-slate-400 max-w-2xl mx-auto text-base sm:text-lg">
               Tailored care plans designed around each client’s health, comfort, and lifestyle needs.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {[
               {
                 title: 'Skilled Nursing',
@@ -379,7 +405,7 @@ export default function PublicApp() {
             ].map((service) => (
               <div
                 key={service.title}
-                className="bg-slate-900 border border-slate-800 rounded-3xl p-8 hover:border-blue-500/40 transition-all duration-300"
+                className="bg-slate-900 border border-slate-800 rounded-3xl p-6 lg:p-8 hover:border-blue-500/40 transition-all duration-300"
               >
                 <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6">
                   <div className="w-6 h-6 rounded-full bg-blue-400" />
@@ -393,13 +419,13 @@ export default function PublicApp() {
         </div>
       </section>
 
-      <section id="about" className="py-24">
-        <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+      <section id="about" className="py-20 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <div>
             <img
               src="https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?q=80&w=1200&auto=format&fit=crop"
               alt="Caregiver"
-              className="rounded-[32px] h-[550px] object-cover w-full"
+              className="rounded-[32px] h-[320px] sm:h-[420px] lg:h-[550px] object-cover w-full"
             />
           </div>
 
@@ -408,11 +434,11 @@ export default function PublicApp() {
               Why Families Choose Us
             </p>
 
-            <h2 className="text-4xl lg:text-5xl font-bold leading-tight mb-8">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-8">
               Personalized Care With Professional Excellence
             </h2>
 
-            <div className="space-y-6 text-slate-300 text-lg leading-relaxed">
+            <div className="space-y-6 text-slate-300 text-base sm:text-lg leading-relaxed">
               <p>
                 At Kenkwo Homecare, we believe exceptional care goes beyond basic assistance. Our mission is to provide compassionate, high-quality support that enhances dignity, independence, and peace of mind.
               </p>
@@ -422,7 +448,7 @@ export default function PublicApp() {
               </p>
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-6 mt-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mt-10">
               <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
                 <h3 className="font-bold text-xl mb-2">Trusted Caregivers</h3>
                 <p className="text-slate-400">Carefully screened and compassionate professionals.</p>
@@ -439,16 +465,16 @@ export default function PublicApp() {
 
       <CaregiverCareerPortal />
 
-      <section id="contact" className="py-24">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="bg-slate-900 border border-slate-800 rounded-[32px] p-10 lg:p-14 text-center">
-            <h2 className="text-4xl font-bold mb-6">Ready to Get Started?</h2>
+      <section id="contact" className="py-20 lg:py-24">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="bg-slate-900 border border-slate-800 rounded-[32px] p-6 sm:p-10 lg:p-14 text-center">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-6">Ready to Get Started?</h2>
 
-            <p className="text-slate-400 text-lg mb-10 max-w-2xl mx-auto">
+            <p className="text-slate-400 text-base sm:text-lg mb-10 max-w-2xl mx-auto">
               Contact Kenkwo Homecare today to discuss your care needs and schedule a personalized consultation.
             </p>
 
-            <div className="grid md:grid-cols-3 gap-6 text-left">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-left">
               <div className="bg-slate-950 border border-slate-800 rounded-2xl p-6">
                 <p className="text-slate-500 text-sm mb-2">Phone</p>
                 <h3 className="text-lg font-semibold">{phoneNumber}</h3>
@@ -468,77 +494,106 @@ export default function PublicApp() {
         </div>
       </section>
 
-      <div className="fixed bottom-6 right-6 w-[360px] bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl overflow-hidden z-50">
-        <div className="bg-blue-600 px-5 py-4 flex items-center justify-between">
-          <div>
-            <h3 className="font-semibold">AI Care Assistant</h3>
-            <p className="text-xs text-blue-100">24/7 Patient Support</p>
-          </div>
-
-          <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse" />
-        </div>
-
-        <div className="h-[300px] overflow-y-auto p-4 space-y-3 bg-slate-950">
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-            >
-              <div
-                className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm ${
-                  message.role === 'user' ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-200'
-                }`}
-              >
-                {message.text}
-              </div>
-            </div>
-          ))}
-
-          {isChatSending && (
-            <div className="flex justify-start">
-              <div className="max-w-[80%] px-4 py-3 rounded-2xl text-sm bg-slate-800 text-slate-200">
-                Typing...
-              </div>
-            </div>
-          )}
-
-          <div ref={chatEndRef} />
-        </div>
-
-        <div className="p-4 border-t border-slate-800 flex gap-2">
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                event.preventDefault()
-                sendMessage()
-              }
-            }}
-            placeholder="Ask about care services..."
-            className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm outline-none"
-          />
-
+      <div
+        className="fixed right-3 sm:right-6 z-50"
+        style={{ bottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
+      >
+        {isChatMinimized ? (
           <button
-            onClick={sendMessage}
-            disabled={isChatSending}
-            className="bg-blue-600 hover:bg-blue-700 px-5 rounded-xl disabled:opacity-60 disabled:cursor-not-allowed"
+            type="button"
+            onClick={() => setIsChatMinimized(false)}
+            className="h-12 w-12 rounded-full bg-blue-600 hover:bg-blue-700 border border-blue-400/40 shadow-2xl flex items-center justify-center transition"
+            aria-label="Maximize chat assistant"
+            title="Open AI Care Assistant"
           >
-            Send
+            <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M4 5h16v11H7l-3 3V5z" />
+            </svg>
           </button>
-        </div>
+        ) : (
+          <div className="w-[calc(100vw-1.5rem)] max-w-[360px] bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl overflow-hidden">
+            <div className="bg-blue-600 px-4 py-3 sm:px-5 sm:py-4 flex items-center justify-between gap-3">
+              <div>
+                <h3 className="font-semibold">AI Care Assistant</h3>
+                <p className="text-xs text-blue-100">24/7 Patient Support</p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse" />
+                <button
+                  type="button"
+                  onClick={() => setIsChatMinimized(true)}
+                  className="text-xs font-semibold bg-white/15 hover:bg-white/25 rounded-lg px-3 py-1.5 transition"
+                  aria-label="Minimize chat assistant"
+                >
+                  Minimize
+                </button>
+              </div>
+            </div>
+
+            <div className="h-[280px] sm:h-[300px] overflow-y-auto p-4 space-y-3 bg-slate-950">
+              {messages.map((message, index) => (
+                <div
+                  key={index}
+                  className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm ${
+                      message.role === 'user' ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-200'
+                    }`}
+                  >
+                    {message.text}
+                  </div>
+                </div>
+              ))}
+
+              {isChatSending && (
+                <div className="flex justify-start">
+                  <div className="max-w-[80%] px-4 py-3 rounded-2xl text-sm bg-slate-800 text-slate-200">
+                    Typing...
+                  </div>
+                </div>
+              )}
+
+              <div ref={chatEndRef} />
+            </div>
+
+            <div className="p-4 border-t border-slate-800 flex gap-2">
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    event.preventDefault()
+                    sendMessage()
+                  }
+                }}
+                placeholder="Ask about care services..."
+                className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm outline-none"
+              />
+
+              <button
+                onClick={sendMessage}
+                disabled={isChatSending}
+                className="bg-blue-600 hover:bg-blue-700 px-5 rounded-xl disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                Send
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
-      <section ref={bookingSectionRef} id="booking" className="py-24 bg-slate-900/40">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-14">
-            <h2 className="text-4xl font-bold mb-4">Book a Care Consultation</h2>
-            <p className="text-slate-400">Schedule appointments directly online.</p>
+      <section ref={bookingSectionRef} id="booking" className="py-20 lg:py-24 bg-slate-900/40">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12 sm:mb-14">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Book a Care Consultation</h2>
+            <p className="text-slate-400 text-sm sm:text-base">Schedule appointments directly online.</p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-10">
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8">
-              <h3 className="text-2xl font-semibold mb-6">Appointment Booking</h3>
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-10">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8">
+              <h3 className="text-xl sm:text-2xl font-semibold mb-6">Appointment Booking</h3>
 
               <form className="space-y-5" onSubmit={handleBookingSubmit}>
                 <input
@@ -590,8 +645,8 @@ export default function PublicApp() {
               </form>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-950/40 to-slate-900 border border-slate-800 rounded-3xl p-8">
-              <h3 className="text-2xl font-semibold mb-6">Integrated Platform Features</h3>
+            <div className="bg-gradient-to-br from-blue-950/40 to-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8">
+              <h3 className="text-xl sm:text-2xl font-semibold mb-6">Integrated Platform Features</h3>
 
               <div className="grid gap-4">
                 {[
@@ -617,13 +672,13 @@ export default function PublicApp() {
         </div>
       </section>
 
-      <section id="news" className="py-24 bg-slate-900/50">
-        <div className="max-w-7xl mx-auto px-6">
+      <section id="news" className="py-20 lg:py-24 bg-slate-900/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
             <div>
               <p className="text-blue-400 font-semibold uppercase tracking-widest mb-3">Newsroom</p>
-              <h2 className="text-4xl font-bold mb-3">Latest Homecare Insights</h2>
-              <p className="text-slate-400 max-w-2xl">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-3">Latest Homecare Insights</h2>
+              <p className="text-slate-400 max-w-2xl text-sm sm:text-base">
                 Expert guidance for family caregivers, senior safety, and informed care planning.
               </p>
             </div>
@@ -632,7 +687,7 @@ export default function PublicApp() {
             </a>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {newsPosts.slice(0, 3).map((post) => (
               <article
                 key={post.slug}
@@ -653,38 +708,38 @@ export default function PublicApp() {
         </div>
       </section>
 
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-3 gap-8">
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8">
-              <h3 className="text-2xl font-semibold mb-4">Patient Portal</h3>
+      <section className="py-20 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8">
+              <h3 className="text-xl sm:text-2xl font-semibold mb-4">Patient Portal</h3>
               <p className="text-slate-400 mb-6">
                 Patients and families can securely access care plans, invoices, appointments, and updates.
               </p>
 
-              <button className="bg-blue-600 hover:bg-blue-700 px-5 py-3 rounded-2xl">
+              <button className="bg-blue-600 hover:bg-blue-700 px-5 py-3 rounded-2xl w-full sm:w-auto">
                 Access Portal
               </button>
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8">
-              <h3 className="text-2xl font-semibold mb-4">Caregiver Careers</h3>
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8">
+              <h3 className="text-xl sm:text-2xl font-semibold mb-4">Caregiver Careers</h3>
               <p className="text-slate-400 mb-6">
                 Apply online and upload certifications directly from the portal.
               </p>
 
-              <button className="bg-blue-600 hover:bg-blue-700 px-5 py-3 rounded-2xl">
+              <button className="bg-blue-600 hover:bg-blue-700 px-5 py-3 rounded-2xl w-full sm:w-auto">
                 Apply Now
               </button>
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8">
-              <h3 className="text-2xl font-semibold mb-4">Secure Payments</h3>
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8">
+              <h3 className="text-xl sm:text-2xl font-semibold mb-4">Secure Payments</h3>
               <p className="text-slate-400 mb-6">
                 Stripe integration for invoices, subscriptions, and online payments.
               </p>
 
-              <button className="bg-blue-600 hover:bg-blue-700 px-5 py-3 rounded-2xl">
+              <button className="bg-blue-600 hover:bg-blue-700 px-5 py-3 rounded-2xl w-full sm:w-auto">
                 Pay Invoice
               </button>
             </div>
@@ -693,9 +748,9 @@ export default function PublicApp() {
       </section>
 
       <footer className="border-t border-slate-800 py-8">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between gap-4 text-sm text-slate-500">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-between gap-4 text-sm text-slate-500">
           <p>© 2026 Kenkwo Homecare. All rights reserved.</p>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
             <a href="/news" className="hover:text-white transition">Newsroom</a>
             <a href={portalUrl} className="hover:text-white transition">Operations Portal</a>
             <a href="#" className="hover:text-white transition">Privacy Policy</a>

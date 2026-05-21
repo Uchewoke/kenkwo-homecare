@@ -247,55 +247,55 @@ export default function CareerApplicationsAdminPanel() {
   }
 
   return (
-    <section id="admin" className="py-24 bg-slate-950">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-10">
+    <section id="admin" className="py-20 sm:py-24 bg-slate-950">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6">
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-8 sm:mb-10">
           <div>
             <p className="text-blue-400 font-semibold uppercase tracking-widest mb-4">Admin Panel</p>
-            <h2 className="text-4xl lg:text-5xl font-bold mb-3">Career Application Manager</h2>
-            <p className="text-slate-400 max-w-3xl">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-3">Career Application Manager</h2>
+            <p className="text-slate-400 max-w-3xl text-sm sm:text-base">
               Frontend-only dashboard mode with local demo records.
             </p>
           </div>
 
           <button
             type="button"
-            onClick={resetDemoData}
-            className="self-start md:self-auto px-5 py-3 rounded-2xl border border-slate-700 bg-slate-900 hover:border-blue-500/50 transition"
+                  className="bg-slate-950 border border-slate-700 rounded-xl sm:rounded-2xl px-3 py-2.5 sm:py-3 text-sm outline-none focus:border-blue-500 transition min-w-0 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+            className="self-start md:self-auto px-4 py-3 rounded-2xl border border-slate-700 bg-slate-900 hover:border-blue-500/50 transition w-full md:w-auto text-sm min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
           >
             Restore Demo Data
           </button>
         </div>
-
-        <div className="grid sm:grid-cols-2 xl:grid-cols-5 gap-4 mb-8">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+                  className="bg-slate-950 border border-slate-700 rounded-xl sm:rounded-2xl px-3 py-2.5 sm:py-3 text-sm outline-none focus:border-blue-500 transition min-w-0 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 mb-8">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5">
             <p className="text-slate-500 text-sm mb-1">Total</p>
-            <h3 className="text-3xl font-bold">{applications.length}</h3>
+            <h3 className="text-2xl sm:text-3xl font-bold">{applications.length}</h3>
           </div>
           {STATUS_OPTIONS.map((status) => (
-            <div key={status} className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+            <div key={status} className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5">
               <p className="text-slate-500 text-sm mb-1">{formatStatusLabel(status)}</p>
-              <h3 className="text-3xl font-bold">{statusCountMap[status] ?? 0}</h3>
+              <h3 className="text-2xl sm:text-3xl font-bold">{statusCountMap[status] ?? 0}</h3>
             </div>
           ))}
         </div>
 
         <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-6 items-start">
           <div className="space-y-4">
-            <div className="bg-slate-900 border border-slate-800 rounded-[28px] p-5 lg:p-6 space-y-4">
-              <div className="grid md:grid-cols-3 gap-4">
+            <div className="bg-slate-900 border border-slate-800 rounded-[28px] p-4 sm:p-5 lg:p-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
                 <input
                   name="search"
                   value={filters.search}
                   onChange={handleFilterChange}
                   placeholder="Search applicants"
-                  className="bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3 outline-none focus:border-blue-500 transition"
+                  className="bg-slate-950 border border-slate-700 rounded-xl sm:rounded-2xl px-3 py-2.5 sm:py-3 text-sm outline-none focus:border-blue-500 transition min-w-0"
                 />
                 <select
                   name="status"
                   value={filters.status}
                   onChange={handleFilterChange}
-                  className="bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3 outline-none focus:border-blue-500 transition"
+                  className="bg-slate-950 border border-slate-700 rounded-xl sm:rounded-2xl px-3 py-2.5 sm:py-3 text-sm outline-none focus:border-blue-500 transition min-w-0"
                 >
                   <option value="">All statuses</option>
                   {STATUS_OPTIONS.map((status) => (
@@ -307,8 +307,8 @@ export default function CareerApplicationsAdminPanel() {
                 <select
                   name="position"
                   value={filters.position}
-                  onChange={handleFilterChange}
-                  className="bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3 outline-none focus:border-blue-500 transition"
+                  className="bg-slate-950 border border-slate-700 rounded-xl sm:rounded-2xl px-3 py-2.5 sm:py-3 text-sm outline-none focus:border-blue-500 transition min-w-0 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+                  className="bg-slate-950 border border-slate-700 rounded-xl sm:rounded-2xl px-3 py-2.5 sm:py-3 text-sm outline-none focus:border-blue-500 transition min-w-0"
                 >
                   <option value="">All positions</option>
                   {availablePositions.map((position) => (
@@ -323,14 +323,14 @@ export default function CareerApplicationsAdminPanel() {
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-[28px] overflow-hidden">
-              <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
-                <h3 className="font-semibold text-lg">Applications</h3>
+              <div className="px-4 sm:px-6 py-4 border-b border-slate-800 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                <h3 className="font-semibold text-base sm:text-lg">Applications</h3>
                 <p className="text-sm text-slate-500">{`${filteredApplications.length} shown`}</p>
               </div>
 
-              <div className="max-h-[720px] overflow-y-auto divide-y divide-slate-800">
+              <div className="max-h-[560px] sm:max-h-[720px] overflow-y-auto divide-y divide-slate-800">
                 {filteredApplications.length === 0 && (
-                  <div className="px-6 py-10 text-center text-slate-500">
+                  <div className="px-4 sm:px-6 py-10 text-center text-slate-500">
                     No applications match the current filters.
                   </div>
                 )}
@@ -340,26 +340,26 @@ export default function CareerApplicationsAdminPanel() {
                     key={application.id}
                     type="button"
                     onClick={() => handleSelectApplication(application)}
-                    className={`w-full text-left px-6 py-5 transition hover:bg-slate-800/60 ${
+                    className={`w-full text-left px-4 sm:px-6 py-5 transition hover:bg-slate-800/60 ${
                       selectedApplicationId === application.id ? 'bg-slate-800/80' : ''
                     }`}
                   >
                     <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                       <div>
                         <div className="flex flex-wrap items-center gap-3 mb-2">
-                          <h4 className="text-lg font-semibold">{application.fullName}</h4>
+                          <h4 className="text-base sm:text-lg font-semibold break-words">{application.fullName}</h4>
                           <span
                             className={`text-xs border px-3 py-1 rounded-full ${statusToneClass(application.status)}`}
                           >
                             {formatStatusLabel(application.status)}
                           </span>
                         </div>
-                        <p className="text-slate-400 text-sm">
+                        <p className="text-slate-400 text-xs sm:text-sm break-words leading-relaxed">
                           {application.position} · {application.city} · {application.email}
                         </p>
                       </div>
 
-                      <div className="text-sm text-slate-500">
+                      <div className="text-sm text-slate-400">
                         <p>{formatDateTime(application.submittedAt)}</p>
                       </div>
                     </div>
@@ -369,12 +369,12 @@ export default function CareerApplicationsAdminPanel() {
             </div>
           </div>
 
-          <div className="bg-slate-900 border border-slate-800 rounded-[28px] p-6 lg:p-7 sticky top-6">
+          <div className="bg-slate-900 border border-slate-800 rounded-[28px] p-4 sm:p-6 lg:p-7 sticky top-6">
             {selectedApplication ? (
-              <div className="space-y-6">
+              <div className="space-y-5 sm:space-y-6">
                 <div>
                   <div className="flex flex-wrap items-center gap-3 mb-3">
-                    <h3 className="text-2xl font-semibold">{selectedApplication.fullName}</h3>
+                    <h3 className="text-lg sm:text-2xl font-semibold break-words">{selectedApplication.fullName}</h3>
                     <span
                       className={`text-xs border px-3 py-1 rounded-full ${statusToneClass(selectedApplication.status)}`}
                     >
@@ -385,7 +385,7 @@ export default function CareerApplicationsAdminPanel() {
                 </div>
 
                 <div className="grid gap-4 text-sm">
-                  <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4">
+                  <div className="bg-slate-950 border border-slate-800 rounded-2xl p-3 sm:p-4">
                     <p className="text-slate-500 mb-1">Contact</p>
                     <p>{selectedApplication.email}</p>
                     <p>{selectedApplication.phone}</p>
@@ -394,7 +394,7 @@ export default function CareerApplicationsAdminPanel() {
                     </p>
                   </div>
 
-                  <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4">
+                  <div className="bg-slate-950 border border-slate-800 rounded-2xl p-3 sm:p-4">
                     <p className="text-slate-500 mb-1">Resume</p>
                     <p className="text-slate-300">{selectedApplication.resume.originalName}</p>
                     <p className="text-slate-500 mt-2">
@@ -402,12 +402,12 @@ export default function CareerApplicationsAdminPanel() {
                     </p>
                   </div>
 
-                  <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4">
+                  <div className="bg-slate-950 border border-slate-800 rounded-2xl p-3 sm:p-4">
                     <p className="text-slate-500 mb-1">Experience</p>
                     <p className="leading-relaxed text-slate-300">{selectedApplication.experience}</p>
                   </div>
 
-                  <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4">
+                  <div className="bg-slate-950 border border-slate-800 rounded-2xl p-3 sm:p-4">
                     <p className="text-slate-500 mb-1">Certifications</p>
                     <p className="leading-relaxed text-slate-300">
                       {selectedApplication.certifications || 'None listed'}
@@ -425,7 +425,7 @@ export default function CareerApplicationsAdminPanel() {
                       name="status"
                       value={detailForm.status}
                       onChange={handleDetailChange}
-                      className="w-full bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3 outline-none focus:border-blue-500 transition"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3 outline-none focus:border-blue-500 transition min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                     >
                       {STATUS_OPTIONS.map((status) => (
                         <option key={status} value={status}>
@@ -446,7 +446,7 @@ export default function CareerApplicationsAdminPanel() {
                       onChange={handleDetailChange}
                       rows="5"
                       placeholder="Add interview notes, follow-up details, or internal comments."
-                      className="w-full bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3 outline-none focus:border-blue-500 transition"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3 outline-none focus:border-blue-500 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                     />
                   </div>
                 </div>
@@ -456,7 +456,7 @@ export default function CareerApplicationsAdminPanel() {
                     type="button"
                     onClick={handleSaveApplication}
                     disabled={saving}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed px-5 py-3 rounded-2xl font-semibold transition"
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed px-5 py-3 rounded-2xl font-semibold transition min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                   >
                     {saving ? 'Saving...' : 'Save Changes'}
                   </button>
@@ -464,7 +464,7 @@ export default function CareerApplicationsAdminPanel() {
                     type="button"
                     onClick={handleDeleteApplication}
                     disabled={saving}
-                    className="flex-1 border border-rose-500/40 text-rose-300 hover:bg-rose-500/10 disabled:opacity-60 disabled:cursor-not-allowed px-5 py-3 rounded-2xl font-semibold transition"
+                    className="flex-1 border border-rose-500/40 text-rose-300 hover:bg-rose-500/10 disabled:opacity-60 disabled:cursor-not-allowed px-5 py-3 rounded-2xl font-semibold transition min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                   >
                     Remove From List
                   </button>
