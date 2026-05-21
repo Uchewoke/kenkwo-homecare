@@ -1,0 +1,29 @@
+{
+  "name": "kenkwo-homecare-website",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "workspaces": [
+    "apps/public",
+    "apps/portal"
+  ],
+  "scripts": {
+    "server": "node server.js",
+    "dev:public": "npm.cmd --workspace apps/public run dev",
+    "dev:portal": "npm.cmd --workspace apps/portal run dev",
+    "dev:all": "concurrently \"npm:server\" \"npm:dev:public\" \"npm:dev:portal\"",
+    "build:public": "npm.cmd --workspace apps/public run build",
+    "build:portal": "npm.cmd --workspace apps/portal run build",
+    "build": "npm.cmd run build:public && npm.cmd run build:portal"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "multer": "^2.1.1",
+    "socket.io": "^4.8.3"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "vite": "^8.0.12"
+  }
+}
