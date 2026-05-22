@@ -7,10 +7,14 @@ import { DatabaseSync } from 'node:sqlite'
 import { Server } from 'socket.io'
 import cors from 'cors'
 import { fileURLToPath } from 'url'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const app = express()
 
 const defaultAllowedOrigins = ['http://localhost:5173', 'http://localhost:5174']
+const adminFaqToken = (process.env.ADMIN_FAQ_TOKEN || '').trim()
 const allowedOrigins = (process.env.CORS_ORIGINS || '')
   .split(',')
   .map((origin) => origin.trim())
@@ -40,6 +44,8 @@ const uploadsDir = path.join(__dirname, 'uploads', 'career-applications')
 const dataDir = path.join(__dirname, 'data')
 const applicationsStorePath = path.join(dataDir, 'career-applications.json')
 const databasePath = path.join(dataDir, 'career-applications.db')
+const assistantFaqPath = path.join(__dirname, 'apps', 'public', 'public', 'assistant-faq.json')
+const newsPostsPath = path.join(__dirname, 'apps', 'public', 'public', 'news-posts.json')
 
 fs.mkdirSync(uploadsDir, { recursive: true })
 fs.mkdirSync(dataDir, { recursive: true })
@@ -196,6 +202,181 @@ const mapCareerApplication = (row) => ({
   updatedAt: row.updated_at,
   reviewedAt: row.reviewed_at,
 })
+
+const normalizeAssistantFaqEntry = (entry) => {
+  if (!entry || typeof entry !== 'object') return null
+
+  const keywords = Array.isArray(entry.keywords)
+    ? entry.keywords
+        .filter((keyword) => typeof keyword === 'string')
+        .map((keyword) => keyword.trim().toLowerCase())
+        .filter(Boolean)
+    : []
+
+  const response = typeof entry.response === 'string' ? entry.response.trim() : ''
+
+  if (keywords.length === 0 || response.length === 0) {
+    return null
+  }
+
+  return {
+    id: typeof entry.id === 'string' && entry.id.trim() ? entry.id.trim() : `faq-${Date.now()}`,
+    keywords,
+    response,
+    leadType: entry.leadType === 'caregiver' ? 'caregiver' : 'client',
+  }
+}
+
+const normalizeAssistantFaqConfig = (payload) => {
+  const sourceItems = Array.isArray(payload) ? payload : payload?.items
+  if (!Array.isArray(sourceItems)) {
+    return null
+  }
+
+  const items = sourceItems.map(normalizeAssistantFaqEntry).filter(Boolean)
+  if (items.length === 0) {
+    return null
+  }
+
+  return {
+    version:
+      typeof payload?.version === 'string' && payload.version.trim()
+        ? payload.version.trim()
+        : '1.0',
+    lastUpdated: new Date().toISOString().slice(0, 10),
+    items,
+  }
+}
+
+const readAssistantFaqConfig = () => {
+  if (!fs.existsSync(assistantFaqPath)) {
+    return null
+  }
+
+  try {
+    const raw = fs.readFileSync(assistantFaqPath, 'utf8')
+    const parsed = JSON.parse(raw)
+    return normalizeAssistantFaqConfig(parsed)
+  } catch {
+    return null
+  }
+}
+
+const normalizeNewsPost = (post) => {
+  if (!post || typeof post !== 'object') return null
+
+  const requiredTextFields = [
+    'slug',
+    'title',
+    'excerpt',
+    'publishedAt',
+    'updatedAt',
+    'author',
+    'category',
+    'heroImage',
+  ]
+
+  const hasAllRequiredFields = requiredTextFields.every(
+    (field) => typeof post[field] === 'string' && post[field].trim().length > 0,
+  )
+
+  const tags = Array.isArray(post.tags)
+    ? post.tags.filter((tag) => typeof tag === 'string').map((tag) => tag.trim()).filter(Boolean)
+    : []
+
+  const content = Array.isArray(post.content)
+    ? post.content
+        .filter((paragraph) => typeof paragraph === 'string')
+        .map((paragraph) => paragraph.trim())
+        .filter(Boolean)
+    : []
+
+  if (!hasAllRequiredFields || content.length === 0) {
+    return null
+  }
+
+  return {
+    slug: post.slug.trim(),
+    title: post.title.trim(),
+    excerpt: post.excerpt.trim(),
+    publishedAt: post.publishedAt.trim(),
+    updatedAt: post.updatedAt.trim(),
+    author: post.author.trim(),
+    category: post.category.trim(),
+    tags,
+    heroImage: post.heroImage.trim(),
+    content,
+  }
+}
+
+const normalizeNewsPostsConfig = (payload) => {
+  const sourceItems = Array.isArray(payload) ? payload : payload?.items
+  if (!Array.isArray(sourceItems)) {
+    return null
+  }
+
+  const items = sourceItems.map(normalizeNewsPost).filter(Boolean)
+  if (items.length === 0) {
+    return null
+  }
+
+  return {
+    version:
+      typeof payload?.version === 'string' && payload.version.trim()
+        ? payload.version.trim()
+        : '1.0',
+    lastUpdated: new Date().toISOString().slice(0, 10),
+    items,
+  }
+}
+
+const readNewsPostsConfig = () => {
+  if (!fs.existsSync(newsPostsPath)) {
+    return null
+  }
+
+  try {
+    const raw = fs.readFileSync(newsPostsPath, 'utf8')
+    const parsed = JSON.parse(raw)
+    return normalizeNewsPostsConfig(parsed)
+  } catch {
+    return null
+  }
+}
+
+const getAdminTokenFromRequest = (req) => {
+  const authHeader = typeof req.headers.authorization === 'string' ? req.headers.authorization : ''
+  if (authHeader.toLowerCase().startsWith('bearer ')) {
+    return authHeader.slice(7).trim()
+  }
+
+  const xAdminToken = req.headers['x-admin-token']
+  if (typeof xAdminToken === 'string') {
+    return xAdminToken.trim()
+  }
+
+  const xAdminKey = req.headers['x-admin-key']
+  if (typeof xAdminKey === 'string') {
+    return xAdminKey.trim()
+  }
+
+  return ''
+}
+
+const requireAdminFaqAuth = (req, res, next) => {
+  if (!adminFaqToken) {
+    return res.status(503).json({
+      message: 'Admin FAQ auth is not configured. Set ADMIN_FAQ_TOKEN on the server.',
+    })
+  }
+
+  const providedToken = getAdminTokenFromRequest(req)
+  if (!providedToken || providedToken !== adminFaqToken) {
+    return res.status(401).json({ message: 'Unauthorized admin token.' })
+  }
+
+  return next()
+}
 
 const migrateLegacyCareerApplications = () => {
   if (!fs.existsSync(applicationsStorePath)) {
@@ -522,6 +703,68 @@ app.delete('/api/career-applications/:id', (req, res) => {
   deleteCareerApplicationStatement.run(req.params.id)
 
   return res.json({ message: 'Career application deleted successfully.' })
+})
+
+app.get('/api/admin/assistant-faq', requireAdminFaqAuth, (_req, res) => {
+  const faqConfig = readAssistantFaqConfig()
+
+  if (!faqConfig) {
+    return res.status(404).json({ message: 'Assistant FAQ configuration was not found or is invalid.' })
+  }
+
+  return res.json({ config: faqConfig })
+})
+
+app.put('/api/admin/assistant-faq', requireAdminFaqAuth, (req, res) => {
+  const normalizedConfig = normalizeAssistantFaqConfig(req.body)
+
+  if (!normalizedConfig) {
+    return res.status(400).json({
+      message:
+        'Invalid FAQ payload. Provide items with non-empty keywords arrays and response text.',
+    })
+  }
+
+  try {
+    fs.writeFileSync(assistantFaqPath, `${JSON.stringify(normalizedConfig, null, 2)}\n`, 'utf8')
+    return res.json({ message: 'Assistant FAQ configuration updated successfully.', config: normalizedConfig })
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Failed to write assistant FAQ configuration.',
+      detail: error instanceof Error ? error.message : 'Unknown error',
+    })
+  }
+})
+
+app.get('/api/admin/blog-posts', requireAdminFaqAuth, (_req, res) => {
+  const newsConfig = readNewsPostsConfig()
+
+  if (!newsConfig) {
+    return res.status(404).json({ message: 'Blog posts configuration was not found or is invalid.' })
+  }
+
+  return res.json({ config: newsConfig })
+})
+
+app.put('/api/admin/blog-posts', requireAdminFaqAuth, (req, res) => {
+  const normalizedConfig = normalizeNewsPostsConfig(req.body)
+
+  if (!normalizedConfig) {
+    return res.status(400).json({
+      message:
+        'Invalid blog posts payload. Provide items with required text fields, tags, and content paragraphs.',
+    })
+  }
+
+  try {
+    fs.writeFileSync(newsPostsPath, `${JSON.stringify(normalizedConfig, null, 2)}\n`, 'utf8')
+    return res.json({ message: 'Blog posts configuration updated successfully.', config: normalizedConfig })
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Failed to write blog posts configuration.',
+      detail: error instanceof Error ? error.message : 'Unknown error',
+    })
+  }
 })
 
 io.on('connection', (socket) => {

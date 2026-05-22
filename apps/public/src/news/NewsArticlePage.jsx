@@ -1,11 +1,12 @@
-import { newsPostMap } from './posts'
+import { buildNewsPostMap, defaultNewsPosts } from './posts'
 
 const formatDate = (dateString) =>
   new Intl.DateTimeFormat([], {
     dateStyle: 'medium',
   }).format(new Date(dateString))
 
-export default function NewsArticlePage({ slug }) {
+export default function NewsArticlePage({ slug, posts = defaultNewsPosts }) {
+  const newsPostMap = buildNewsPostMap(posts)
   const post = newsPostMap[slug]
 
   if (!post) {

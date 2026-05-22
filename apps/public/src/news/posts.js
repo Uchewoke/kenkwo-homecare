@@ -1,4 +1,51 @@
-export const newsPosts = [
+const normalizeNewsPost = (post) => {
+  if (!post || typeof post !== 'object') return null
+
+  const requiredTextFields = [
+    'slug',
+    'title',
+    'excerpt',
+    'publishedAt',
+    'updatedAt',
+    'author',
+    'category',
+    'heroImage',
+  ]
+
+  const hasAllRequiredFields = requiredTextFields.every(
+    (field) => typeof post[field] === 'string' && post[field].trim().length > 0,
+  )
+
+  if (!hasAllRequiredFields) return null
+
+  const tags = Array.isArray(post.tags)
+    ? post.tags.filter((tag) => typeof tag === 'string').map((tag) => tag.trim()).filter(Boolean)
+    : []
+
+  const content = Array.isArray(post.content)
+    ? post.content
+        .filter((paragraph) => typeof paragraph === 'string')
+        .map((paragraph) => paragraph.trim())
+        .filter(Boolean)
+    : []
+
+  if (content.length === 0) return null
+
+  return {
+    slug: post.slug.trim(),
+    title: post.title.trim(),
+    excerpt: post.excerpt.trim(),
+    publishedAt: post.publishedAt.trim(),
+    updatedAt: post.updatedAt.trim(),
+    author: post.author.trim(),
+    category: post.category.trim(),
+    tags,
+    heroImage: post.heroImage.trim(),
+    content,
+  }
+}
+
+export const defaultNewsPosts = [
   {
     slug: 'fall-prevention-at-home-checklist',
     title: 'Fall Prevention at Home: A Practical Safety Checklist for Families',
@@ -64,4 +111,23 @@ export const newsPosts = [
   },
 ]
 
-export const newsPostMap = Object.fromEntries(newsPosts.map((post) => [post.slug, post]))
+export const buildNewsPostMap = (posts) => Object.fromEntries(posts.map((post) => [post.slug, post]))
+
+export const newsPosts = defaultNewsPosts
+export const newsPostMap = buildNewsPostMap(defaultNewsPosts)
+
+export const loadNewsPosts = async () => {
+  try {
+    const response = await fetch('/news-posts.json', { cache: 'no-store' })
+    if (!response.ok) return []
+
+    const payload = await response.json()
+    const sourceItems = Array.isArray(payload) ? payload : payload?.items
+    if (!Array.isArray(sourceItems)) return []
+
+    const normalized = sourceItems.map(normalizeNewsPost).filter(Boolean)
+    return normalized
+  } catch {
+    return []
+  }
+}

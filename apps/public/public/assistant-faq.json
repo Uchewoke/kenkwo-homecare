@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2026-05-22",
+  "items": [
+    {
+      "id": "services",
+      "keywords": ["service", "services", "care plan", "home care", "support at home"],
+      "response": "We provide Skilled Nursing, Private Rehabilitation, Companion Care, Homemaker Services, Respite Care, and IV Infusion Services.",
+      "leadType": "client"
+    },
+    {
+      "id": "pricing",
+      "keywords": ["price", "cost", "rate", "rates", "afford", "payment"],
+      "response": "Pricing depends on care level, visit frequency, and clinical needs. We provide personalized quotes after a consultation.",
+      "leadType": "client"
+    },
+    {
+      "id": "contact",
+      "keywords": ["contact", "phone", "email", "call", "reach you"],
+      "response": "You can reach Kenkwo Homecare at {phoneNumber} or {bookingEmail}.",
+      "leadType": "client"
+    },
+    {
+      "id": "caregiver-apply",
+      "keywords": ["job", "jobs", "career", "apply", "hiring", "employment"],
+      "response": "We are actively reviewing caregiver applications for multiple roles. Use the Careers section to submit your information.",
+      "leadType": "caregiver"
+    },
+    {
+      "id": "caregiver-docs",
+      "keywords": ["resume", "certification", "license", "cna", "lpn", "rn", "hha"],
+      "response": "Please include your resume, active certifications/licenses, care experience summary, and work availability in your application.",
+      "leadType": "caregiver"
+    }
+  ]
+}

@@ -1,11 +1,11 @@
-import { newsPosts } from './posts'
+import { defaultNewsPosts } from './posts'
 
 const formatDate = (dateString) =>
   new Intl.DateTimeFormat([], {
     dateStyle: 'medium',
   }).format(new Date(dateString))
 
-export default function NewsListPage() {
+export default function NewsListPage({ posts = defaultNewsPosts }) {
   return (
     <main className="min-h-screen bg-slate-950 text-white py-16 sm:py-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -18,7 +18,7 @@ export default function NewsListPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {newsPosts.map((post) => (
+          {posts.map((post) => (
             <article
               key={post.slug}
               className="bg-slate-900 border border-slate-800 rounded-[28px] overflow-hidden hover:border-blue-500/40 transition"

@@ -3,15 +3,16 @@ import CaregiverCareerPortal from './components/CaregiverCareerPortal'
 import SeoHead from './seo/SeoHead'
 import NewsListPage from './news/NewsListPage'
 import NewsArticlePage from './news/NewsArticlePage'
-import { newsPostMap, newsPosts } from './news/posts'
+import { buildNewsPostMap, defaultNewsPosts, loadNewsPosts } from './news/posts'
+import { defaultAssistantFaq, findAssistantFaqResponse, loadAssistantFaq } from './components/assistantFaq'
 
 const portalUrl = import.meta.env.VITE_PORTAL_URL || 'http://localhost:5174'
 const siteUrl = import.meta.env.VITE_PUBLIC_SITE_URL || 'http://localhost:5173'
 
 export default function PublicApp() {
-  const phoneNumber = '(404) 000-0000'
-  const phoneHref = 'tel:+14040000000'
-  const bookingEmail = 'info@kenkwohomecare.com'
+  const phoneNumber = '770-544-7477'
+  const phoneHref = 'tel:+17705447477'
+  const bookingEmail = 'kenkwohealth@gmail.com'
 
   const [messages, setMessages] = useState([
     {
@@ -23,6 +24,8 @@ export default function PublicApp() {
   const [input, setInput] = useState('')
   const [isChatSending, setIsChatSending] = useState(false)
   const [isChatMinimized, setIsChatMinimized] = useState(false)
+  const [assistantFaqEntries, setAssistantFaqEntries] = useState(defaultAssistantFaq)
+  const [newsPosts, setNewsPosts] = useState(defaultNewsPosts)
   const chatEndRef = useRef(null)
 
   const [bookingForm, setBookingForm] = useState({
@@ -39,47 +42,49 @@ export default function PublicApp() {
   const bookingSectionRef = useRef(null)
 
   const buildAssistantReply = (messageText) => {
-    const normalized = messageText.toLowerCase()
+    const faqResponse = findAssistantFaqResponse(
+      messageText,
+      { phoneNumber, bookingEmail },
+      assistantFaqEntries,
+    )
+    if (faqResponse) return faqResponse
 
-    if (normalized.includes('price') || normalized.includes('cost')) {
-      return 'Our care plans are personalized, so pricing depends on care level and schedule. Tap Schedule Consultation and we can provide a custom quote.'
-    }
-
-    if (normalized.includes('nurse') || normalized.includes('nursing')) {
-      return 'Yes, we provide skilled nursing services including medication support and recovery monitoring. We can match you with a nurse quickly.'
-    }
-
-    if (
-      normalized.includes('service') ||
-      normalized.includes('services') ||
-      normalized.includes('care plan')
-    ) {
-      return 'We offer Skilled Nursing, Private Rehabilitation, Companion Care, Homemaker Services, Respite Care, and IV Infusion Services. Tell me the type of support you need and we can recommend the best fit.'
-    }
-
-    if (
-      normalized.includes('about') ||
-      normalized.includes('who are you') ||
-      normalized.includes('company')
-    ) {
-      return 'Kenkwo Homecare provides compassionate, premium in-home care across North Atlanta. Our focus is trusted caregivers, personalized care plans, and responsive support for families.'
-    }
-
-    if (
-      normalized.includes('contact') ||
-      normalized.includes('phone') ||
-      normalized.includes('email') ||
-      normalized.includes('call')
-    ) {
-      return `You can contact Kenkwo Homecare at ${phoneNumber} or ${bookingEmail}. You can also use the Contact section or book a consultation directly on this page.`
-    }
-
-    if (normalized.includes('job') || normalized.includes('career') || normalized.includes('apply')) {
-      return 'Great to hear your interest. Please use Apply Today in the Careers section, and our hiring team will review your application.'
-    }
-
-    return 'Thank you for contacting Kenkwo Homecare. A care coordinator will reach out shortly. You can also call us directly for immediate assistance.'
+    return `Thank you for reaching out. For client care support or caregiver opportunities, call ${phoneNumber} or email ${bookingEmail}, and our team will guide you to the right next step.`
   }
+
+  useEffect(() => {
+    let isMounted = true
+
+    const hydrateFaq = async () => {
+      const externalFaqEntries = await loadAssistantFaq()
+      if (isMounted && externalFaqEntries.length > 0) {
+        setAssistantFaqEntries(externalFaqEntries)
+      }
+    }
+
+    hydrateFaq()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  useEffect(() => {
+    let isMounted = true
+
+    const hydrateNewsPosts = async () => {
+      const externalNewsPosts = await loadNewsPosts()
+      if (isMounted && externalNewsPosts.length > 0) {
+        setNewsPosts(externalNewsPosts)
+      }
+    }
+
+    hydrateNewsPosts()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   const sendMessage = async () => {
     const trimmedInput = input.trim()
@@ -162,6 +167,10 @@ export default function PublicApp() {
   const activeArticleSlug = currentPath.startsWith('/news/')
     ? currentPath.replace('/news/', '')
     : ''
+  const newsPostMap = buildNewsPostMap(newsPosts)
+  const primaryNewsImage =
+    newsPosts[0]?.heroImage ||
+    'https://images.unsplash.com/photo-1584515933487-779824d29309?q=80&w=1200&auto=format&fit=crop'
   const activeArticle = newsPostMap[activeArticleSlug]
 
   if (currentPath === '/news') {
@@ -173,7 +182,7 @@ export default function PublicApp() {
           title="Kenkwo Newsroom | Homecare Updates and Family Resources"
           description="Read Kenkwo Homecare news, clinical guidance, and family support articles designed to improve in-home care decisions."
           canonicalUrl={canonicalUrl}
-          imageUrl={newsPosts[0].heroImage}
+          imageUrl={primaryNewsImage}
           jsonLdObject={{
             '@context': 'https://schema.org',
             '@type': 'CollectionPage',
@@ -199,7 +208,7 @@ export default function PublicApp() {
           </div>
         </header>
 
-        <NewsListPage />
+        <NewsListPage posts={newsPosts} />
       </div>
     )
   }
@@ -212,7 +221,7 @@ export default function PublicApp() {
     const description = activeArticle
       ? activeArticle.excerpt
       : 'The requested news article could not be found.'
-    const imageUrl = activeArticle?.heroImage || newsPosts[0].heroImage
+    const imageUrl = activeArticle?.heroImage || primaryNewsImage
 
     return (
       <div className="min-h-screen bg-slate-950 text-white">
@@ -252,7 +261,7 @@ export default function PublicApp() {
           </div>
         </header>
 
-        <NewsArticlePage slug={activeArticleSlug} />
+        <NewsArticlePage slug={activeArticleSlug} posts={newsPosts} />
       </div>
     )
   }
@@ -269,7 +278,7 @@ export default function PublicApp() {
           '@type': 'HomeAndConstructionBusiness',
           name: 'Kenkwo Homecare',
           url: `${siteUrl}/`,
-          telephone: '+1-404-000-0000',
+          telephone: '+1-770-544-7477',
           areaServed: 'North Atlanta, Georgia',
           sameAs: [portalUrl],
         }}
@@ -378,9 +387,9 @@ export default function PublicApp() {
                   'Professional nursing support for medication management, wound care, chronic condition monitoring, and recovery assistance.',
               },
               {
-                title: 'Private Rehabilitation',
+                title: 'Private Duty Nursing Care',
                 description:
-                  'Post-surgery and rehabilitation support focused on mobility, recovery, and patient independence.',
+                  'Experience the concierge nursing care you never knew you needed. Limitations from what insurance covers should never stop you from receiving the care you really need and deserve. After Surgery Care: We will integrate you and your loved one\'s recovery preferences while delivering the same level of care you\'d expect from the hospital, at home.',
               },
               {
                 title: 'Companion Care',
@@ -398,9 +407,9 @@ export default function PublicApp() {
                   'Reliable temporary relief for family caregivers while ensuring continuity of care.',
               },
               {
-                title: 'IV Infusion Services',
+                title: 'Complex Care',
                 description:
-                  'Advanced nursing care with safe and professional IV infusion support in the comfort of home.',
+                  'From wound and drain care, to in-depth medication management, to IV antibiotics and more, we have your family\'s health concerns covered with our skilled nursing care.',
               },
             ].map((service) => (
               <div
@@ -482,7 +491,7 @@ export default function PublicApp() {
 
               <div className="bg-slate-950 border border-slate-800 rounded-2xl p-6">
                 <p className="text-slate-500 text-sm mb-2">Email</p>
-                <h3 className="text-lg font-semibold">info@kenkwohomecare.com</h3>
+                <h3 className="text-lg font-semibold">kenkwohealth@gmail.com</h3>
               </div>
 
               <div className="bg-slate-950 border border-slate-800 rounded-2xl p-6">
@@ -591,7 +600,7 @@ export default function PublicApp() {
             <p className="text-slate-400 text-sm sm:text-base">Schedule appointments directly online.</p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-6 lg:gap-10">
+          <div className="max-w-2xl mx-auto">
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8">
               <h3 className="text-xl sm:text-2xl font-semibold mb-6">Appointment Booking</h3>
 
@@ -643,30 +652,6 @@ export default function PublicApp() {
                   </p>
                 )}
               </form>
-            </div>
-
-            <div className="bg-gradient-to-br from-blue-950/40 to-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8">
-              <h3 className="text-xl sm:text-2xl font-semibold mb-6">Integrated Platform Features</h3>
-
-              <div className="grid gap-4">
-                {[
-                  'Real-time caregiver messaging',
-                  'Secure patient portal',
-                  'Stripe payment processing',
-                  'Admin dashboard analytics',
-                  'CRM integration support',
-                  'SEO optimized blog/news system',
-                  'Caregiver job applications',
-                  'HIPAA-friendly architecture',
-                ].map((feature) => (
-                  <div
-                    key={feature}
-                    className="bg-slate-950/60 border border-slate-800 rounded-2xl p-4"
-                  >
-                    {feature}
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
         </div>

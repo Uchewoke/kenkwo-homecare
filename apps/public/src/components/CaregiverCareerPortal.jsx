@@ -294,12 +294,12 @@ export default function CaregiverCareerPortal() {
             </div>
 
             <div className="bg-gradient-to-br from-blue-950/40 to-slate-900 border border-slate-800 rounded-[32px] p-6 sm:p-8">
-              <h3 className="text-xl sm:text-2xl font-semibold mb-4">Backend Workflow</h3>
+              <h3 className="text-xl sm:text-2xl font-semibold mb-4">Application Review Process</h3>
               <div className="space-y-4 text-slate-300">
-                <p>• POSTs to <span className="text-white">/api/career-applications</span></p>
-                <p>• Validates required fields and resume file type</p>
-                <p>• Stores applications in SQLite and uploaded file storage</p>
-                <p>• Saves uploaded resumes under <span className="text-white">/uploads</span></p>
+                <p>• Our hiring team reviews your role preferences and availability.</p>
+                <p>• We verify submitted credentials and relevant care experience.</p>
+                <p>• Qualified candidates are contacted for the next interview step.</p>
+                <p>• You will receive follow-up updates from our recruiting team.</p>
               </div>
             </div>
           </div>

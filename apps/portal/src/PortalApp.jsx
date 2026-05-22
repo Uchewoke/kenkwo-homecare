@@ -1,5 +1,7 @@
 import CareerApplicationsAdminPanel from './components/CareerApplicationsAdminPanel'
 import CaregiverMessaging from './components/CaregiverMessaging'
+import AssistantFaqAdminEditor from './components/AssistantFaqAdminEditor'
+import BlogPostsAdminEditor from './components/BlogPostsAdminEditor'
 
 const publicSiteUrl = import.meta.env.VITE_PUBLIC_SITE_URL || 'http://localhost:5173'
 
@@ -24,6 +26,8 @@ export default function PortalApp() {
       <main>
         <CaregiverMessaging />
         <CareerApplicationsAdminPanel />
+        <AssistantFaqAdminEditor />
+        <BlogPostsAdminEditor />
       </main>
     </div>
   )
